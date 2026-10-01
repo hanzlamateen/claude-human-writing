@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/session_start.py\"",
+            "command": "python3 -S \"${CLAUDE_PLUGIN_ROOT}/hooks/session_start.py\"",
             "timeout": 10
           }
         ]
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/check_outgoing.py\"",
+            "command": "python3 -S \"${CLAUDE_PLUGIN_ROOT}/hooks/check_outgoing.py\"",
             "timeout": 15
           }
         ]

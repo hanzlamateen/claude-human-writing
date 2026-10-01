@@ -20,12 +20,10 @@ from __future__ import annotations
 import json
 import os
 import re
-import shlex
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(os.path.dirname(HERE), "skills", "human-writing", "scripts"))
-from lint_writing import format_findings, lint  # noqa: E402
+LINTER_DIR = os.path.join(os.path.dirname(HERE), "skills", "human-writing", "scripts")
 
 PROSE_EXT = {".md", ".mdx", ".markdown", ".txt", ".rst", ".adoc"}
 MAX_FILE = 1_000_000
@@ -81,6 +79,8 @@ def texts_from_bash(command: str, cwd: str):
         return f" {key} "
 
     stripped = HEREDOC.sub(stash, command)
+    import shlex
+
     try:
         lex = shlex.shlex(stripped, posix=True, punctuation_chars=True)
         lex.whitespace_split = True
@@ -267,6 +267,11 @@ def main() -> int:
     text = "\n\n".join(t for t in texts if t and t.strip())
     if not text.strip():
         return 0
+
+    # Imported only now: most tool calls have nothing to check, and loading the
+    # linter's patterns is most of this hook's run time.
+    sys.path.insert(0, LINTER_DIR)
+    from lint_writing import format_findings, lint
 
     rep = lint(text, rhythm=rhythm)
     blocking = rep.errors + (rep.warnings if mode == "strict" else [])
