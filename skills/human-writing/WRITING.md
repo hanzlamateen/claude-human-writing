@@ -25,15 +25,17 @@ Why: the StoryScope study (Russell et al., arXiv 2604.03136) compared 61,608 sto
 
 ## Sentences and words
 
-- No em dashes. No spaced en dashes or double hyphens standing in for them either. Recast the sentence: split it in two, or reword it so it needs no break ("Fix flaky test by waiting for the port"). A comma or parentheses only where they read naturally. Swapping every dash for a colon or semicolon just makes a new tic.
-- Vary sentence length. A short one lands. A longer one can carry a thought along with its qualifications without being chopped into pieces. Vary paragraphs too; one sentence is a fine paragraph.
-- Avoid contrast reframes ("It's not X, it's Y", "not just X but Y", "This isn't about X. It's about Y.") unless you're correcting a real misunderstanding.
-- Don't group in threes by reflex. Use the number of items there are.
-- Prefer plain words to these: delve, tapestry, testament, realm, landscape, journey, navigate (figurative), leverage, utilize, seamless, robust (outside its technical sense), crucial, pivotal, comprehensive, intricate, nuanced, multifaceted, foster, underscore, showcase, elevate, empower, streamline, genuinely, load-bearing, notably, additionally, furthermore, moreover.
+- No em dashes. They're the clearest Claude tell left: about 32 per 10,000 words against 5 in human writing, and Claude is now the only major model that uses more of them than people do. No spaced en dashes or double hyphens standing in for them either. Recast the sentence: split it in two, or reword it so it needs no break ("Fix flaky test by waiting for the port"). A comma or parentheses only where they read naturally. Swapping every dash for a colon or semicolon just makes a new tic.
+- Vary sentence length. A short one lands. A longer one can carry a thought along with its qualifications without being chopped into pieces. Vary paragraphs too; one sentence is a fine paragraph. Measured AI prose runs long and even, with "and" doing most of the joining.
+- Watch Claude's own words, which are not ChatGPT's: "actually", "genuinely", "honestly", "precisely", "exactly", "somehow", "real" as in "a real fix", "load-bearing". Don't open with "Here's" or lean on "based on" and "according to". Leave out "Honest caveat:", "the smoking gun" and "the one thing you need to".
+- Avoid contrast reframes ("It's not X, it's Y", "not just X but Y", or the split version, "This wasn't X. It was Y.") unless you're correcting a real misunderstanding.
+- Don't group in threes by reflex (AI text has about four times as many triads as human text). Use the number of items there are. The same goes for paired adjectives like "clear and concise".
+- The ChatGPT-era words are worth avoiding too: delve, tapestry, testament, realm, landscape, journey, leverage, utilize, seamless, robust (outside its technical sense), crucial, pivotal, comprehensive, intricate, nuanced, multifaceted, foster, underscore, showcase, elevate, empower, streamline, notably, additionally, furthermore, moreover.
 - Drop the stock moves: "Here's the thing", "Here's what I found", "Let's dive in", "It's worth noting", "The key takeaway", "The bottom line", "In conclusion", "I hope this helps", "Let me know if you have any questions", "Great question", "You're absolutely right".
-- No trailing "-ing" commentary (", highlighting the need for...", ", ensuring a smooth experience").
+- No trailing "-ing" commentary (", highlighting the need for...", ", ensuring a smooth experience", ", making it easier to...").
 - No colon drumrolls ("The fix: ...", "The catch: ...").
-- "Is" is fine. Don't dress it up as "serves as", "stands as" or "represents".
+- "Is" and "has" are fine. Don't dress them up as "serves as", "stands as", "features" or "offers". Use the verb, not the noun made from it ("we implemented", not "the implementation of"), and the verb itself, not "seemed to" or "began to".
+- No arrows (→) or approximately signs (≈) in prose. Write "then", "to" or "about", and use ">" for menu paths ("Settings > System").
 - Hedge once, where the doubt is real. Never "may potentially".
 - Contractions are fine. So is starting a sentence with "And" or "But".
 
@@ -41,9 +43,11 @@ Why: the StoryScope study (Russell et al., arXiv 2604.03136) compared 61,608 sto
 
 - Prose by default. Use a list when the items really are parallel or the order matters.
 - Don't open every bullet with a bold label. Bold one thing at most, the one a reader must not miss.
-- Headings only when the text is long enough that people will scan it.
+- Headings only when the text is long enough that people will scan it, in sentence case. No title heading on top of a short piece.
 - No emoji as bullets or decoration.
 - Skip the "## Summary" plus "## Test plan" layout. It's Claude Code's default PR template, and reviewers spot it at once.
+- When you revise something, hand over the new version. Don't write it as a change log ("What changed in v3", "Revised:").
+- In examples and test data, skip the names models reach for: Sarah or Marcus Chen, Elena Vasquez, Priya, Okafor.
 
 ## Don't overcorrect
 

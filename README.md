@@ -2,7 +2,7 @@
 
 Rules, a skill and a hook that keep Claude's habits out of what we write with it: commit messages, PRs, issues, review replies, docs, status updates, emails and posts.
 
-The rules start from the StoryScope study (arXiv 2604.03136), which compared 61,608 human and AI stories and found Claude the easiest model to recognise: even intensity, one uniform voice, conventional structure, explained morals and quiet wrap-up endings. Its other finding matters more. Stripping surface tics like clichés didn't stop detection, so the rules cover the shape of a text as well as its words. Word-level tells (em dashes, "delve", "not X but Y" and so on) come from the studies it cites. Details are in [skills/human-writing/references](skills/human-writing/references).
+The rules start from the StoryScope study (arXiv 2604.03136), which compared 61,608 human and AI stories and found Claude the easiest model to recognise: even intensity, one uniform voice, conventional structure, explained morals and quiet wrap-up endings. Its other finding matters more. Stripping surface tics like clichés didn't stop detection, so the rules cover the shape of a text as well as its words. The word-level tells come from other measurements, with Claude's own listed first: em dashes (about 32 per 10,000 words against 5 for people), "actually" and "genuinely", "Here's" openers, arrows in prose, title headings. Most published lists were built on ChatGPT output and miss Claude. Details and sources are in [skills/human-writing/references](skills/human-writing/references).
 
 ## What's in it
 
@@ -18,7 +18,7 @@ The rules start from the StoryScope study (arXiv 2604.03136), which compared 61,
 ### Claude Code on a machine
 
 ```sh
-gh repo clone hanzlamateen/claude-human-writing ~/.claude/skills/human-writing
+git clone https://github.com/hanzlamateen/claude-human-writing ~/.claude/skills/human-writing
 ~/.claude/skills/human-writing/install.sh
 ```
 
@@ -30,7 +30,7 @@ Switching Claude accounts on the same machine changes nothing here: the plugin a
 
 Do this once per account. It covers chat on the web, desktop and phone, and Claude Code on any machine signed in to that account. In Claude Code the account copy is synced in as `human-writing@synced`, hooks included (Claude Code 2.1.273 or newer).
 
-1. Go to Customize > Plugins > Add > Add marketplace and enter `hanzlamateen/claude-human-writing`. For a private repo, connect GitHub when asked and give the Claude GitHub App access to this repository. Then add the `human-writing` plugin. If you'd rather not connect GitHub, use Add > Upload plugin with `dist/human-writing-plugin.zip`.
+1. Go to Customize > Plugins > Add > Add marketplace, enter `hanzlamateen/claude-human-writing`, then add the `human-writing` plugin. The repo is public, so there's no GitHub account to connect. Add > Upload plugin with `dist/human-writing-plugin.zip` works too, but then updates are manual.
 2. Paste `claude-ai/personal-preferences.md` into Settings > Profile, under personal preferences. Chat loads the skill only when a request matches it, and the preferences cover everything else.
 
 Where a machine has both the checkout and the synced copy, Claude Code loads the checkout and skips the synced one.

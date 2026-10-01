@@ -7,7 +7,8 @@ When you write anything for me or for other people (messages, emails, docs, PR a
 - No em dashes. Recast the sentence; don't just swap in a colon or semicolon.
 - Vary sentence and paragraph length.
 - No "not X but Y" or "It's not X, it's Y" reframes, no reflexive groups of three, no trailing "-ing" clauses like ", highlighting the need for...".
-- Avoid delve, tapestry, testament, landscape, realm, leverage, seamless, robust, crucial, pivotal, comprehensive, nuanced, foster, underscore, showcase, genuinely, notably, furthermore.
+- Watch Claude's own habits: "actually", "genuinely", "honestly", "precisely", opening with "Here's", arrows (→) in prose, a title heading on a short piece.
+- Avoid the ChatGPT-era words too: delve, tapestry, testament, landscape, realm, leverage, seamless, robust, crucial, pivotal, comprehensive, nuanced, foster, underscore, showcase, notably, furthermore.
 - Skip "Here's the thing", "It's worth noting", "In conclusion", "I hope this helps", "Great question" and "You're absolutely right".
 - Prose before bullets. No bold label at the start of every bullet, headings only in long documents, no emoji as decoration.
 - Don't fake casualness or add typos. Plain and specific is the goal.

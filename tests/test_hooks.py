@@ -76,6 +76,26 @@ class LintTests(unittest.TestCase):
         same = " ".join(["The service reads the config file and starts the worker pool."] * 9)
         self.assertIn("uniform-sentences", self.rules(same))
 
+    def test_claude_specific_patterns(self):
+        self.assertIn("claude-intensifiers", self.rules("It actually works now. Honestly, the old path was genuinely broken."))
+        self.assertNotIn("claude-intensifiers", self.rules("It actually works now, after the second patch landed on main."))
+        self.assertIn("claude-opener", self.rules("Here's what changed in the build."))
+        self.assertIn("contrast-reframe", self.rules("This wasn't a bug. It was a missing check."))
+        self.assertIn("signpost", self.rules("Honest caveat: I only tested Linux."))
+        self.assertIn("signpost", self.rules("That log line is the smoking gun."))
+        self.assertIn("arrows", self.rules("Click Save " + chr(0x2192) + " the dialog closes."))
+        self.assertIn("stock-phrase", self.rules("Tidied the module while preserving behaviour."))
+        self.assertIn("stock-phrase", self.rules("The docs are now clear and concise."))
+        self.assertIn("stock-phrase", self.rules("Our test user is Sarah Chen."))
+        self.assertIn("ing-tail", self.rules("The cache now persists, making it easier to debug."))
+
+    def test_heading_checks(self):
+        self.assertIn("title-case-heading", self.rules("## How We Fixed The Pairing Flow\n\nText."))
+        self.assertNotIn("title-case-heading", self.rules("## How we fixed the pairing flow\n\nText."))
+        self.assertIn("title-heading", self.rules("# Pairing fix\n\nShort body."))
+        self.assertIn("changelog-heading", self.rules("## What changed in v3\n\nStuff."))
+        self.assertNotIn("changelog-heading", self.rules("## What changed\n\nStuff."))
+
     def test_varied_text_is_clean(self):
         text = (
             "Sign-in broke for new users on Tuesday. Nobody could get past the code screen, because the "

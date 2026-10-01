@@ -80,6 +80,9 @@ CONTRAST_REFRAMES = [
     r"\b(isn'?t|is not|aren'?t|are not|wasn'?t|was not)\s+(just\s+|only\s+|really\s+)?about\s+[^.;!?\n]{1,60}?[.;]\s+(it'?s|it is|it was|they'?re|this is)\s+about\b",
     r"\b(isn'?t|is not|aren'?t|are not)\s+(just\s+|only\s+|merely\s+)[^.;!?\n]{1,50}?[.;]\s+(it'?s|it is|they'?re|they are|this is)\b",
     r"\bless (about|a matter of) [^.;!?\n]{1,60}? (and|than) more (about|a matter of)\b",
+    # The split version Claude likes: "This wasn't a bug. It was a missing check."
+    r"\b(this|that|it) (wasn'?t|isn'?t|was not|is not) [^.;!?\n]{1,50}[.;] (it|this|that) (was|is|'s)\b",
+    r"\bit'?s a real [^.;!?,\n]{1,30}, not\b",
 ]
 
 SIGNPOSTS = [
@@ -100,6 +103,9 @@ SIGNPOSTS = [
     r"\bworth (noting|flagging|highlighting|calling out)\b",
     r"\bthe (real|key|core|big) (question|issue|problem|insight|story)\b",
     r"\bmake no mistake\b",
+    r"\bhonest (caveat|answer|take)\b",
+    r"\bsmoking gun\b",
+    r"\bthe (one|single) (thing|most important) [^.;!?\n]{0,40}\b(need|correction|change)\b",
     r"\bbuckle up\b",
     r"\bpicture this\b",
 ]
@@ -118,7 +124,8 @@ COLON_REVEAL = re.compile(
 ING_TAIL = re.compile(
     r",\s+(highlighting|underscoring|emphasi[sz]ing|showcasing|reflecting|ensuring|demonstrating|"
     r"illustrating|signal(l)?ing|cementing|solidifying|fostering|paving the way|reinforcing|"
-    r"marking a|contributing to|setting the stage|laying the groundwork)\b",
+    r"marking a|contributing to|setting the stage|laying the groundwork|making it|allowing (users|you|us|teams|developers)|"
+    r"enabling|resulting in|leading to|providing a|giving (users|you|teams))\b",
     re.I,
 )
 
@@ -166,6 +173,13 @@ STOCK_PHRASES = [
     r"\b(deep|rich) (understanding|history|heritage)\b",
     r"\b(on|in) (a|the|this|your|our) journey\b",
     r"\bensur(e|es|ing) (that )?(a |the )?(smooth|seamless|consistent|robust)\b",
+    r"\bwhile (preserving|maintaining|keeping|ensuring|retaining)\b",
+    r"\b(clear and concise|fast and reliable|safe and secure|simple and intuitive|clean and maintainable|"
+    r"robust and scalable|scalable and maintainable|quick and easy|seamless and intuitive|efficient and effective|"
+    r"accurate and reliable|reliable and efficient)\b",
+    r"\b(seemed|began|started) to (hover|drift|amplify|settle|fade|shift|blur|soften|tighten|linger)\b",
+    r"\b(sarah|marcus) chen\b|\belena vasquez\b|\bokafor\b",
+    r"\bthe irony (wasn'?t|was not) lost\b|\bsomething else entirely\b|\bfor a long moment\b",
 ]
 
 EMOJI = re.compile(
@@ -186,6 +200,18 @@ EPILOGUE_HEADINGS = re.compile(
     r"takeaways|why this matters|wrapping up|final thoughts|impact|overview)\s*:?\s*$",
     re.I | re.M,
 )
+
+
+# Claude's intensifiers. One is fine; several in a short text is a pattern.
+CLAUDE_WORDS = re.compile(r"\b(actually|genuinely|honestly|precisely|exactly|somehow|truly)\b", re.I)
+CLAUDE_OPENER = re.compile(r"^\s*(here'?s|here is|here are|based on|according to)\b", re.I)
+ARROWS = re.compile("[\u2192\u21d2\u27f6\u2248\u2500]")
+CHANGELOG_HEADING = re.compile(
+    r"^#{1,6}\s*(what('?s)? changed (in|since) v\d+|changes (in|since) v\d+|revised( version| draft)?\s*$|"
+    r"revision notes|what holds up|what was wrong)",
+    re.I | re.M,
+)
+SMALL_WORDS = {"a", "an", "the", "and", "or", "but", "of", "in", "on", "at", "to", "for", "by", "with", "vs", "via", "from", "as", "is"}
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +375,40 @@ def lint(text: str, rhythm: bool = True) -> Report:
         add(Finding("warn", "stock-word", line_of(masked, s), excerpt(masked, s, e) + (f"  (x{n})" if n > 1 else ""),
                     f"'{w}' is an AI favourite; use a plainer or more specific word"))
 
+    hits = CLAUDE_WORDS.findall(masked)
+    n_tokens = len(re.findall(r"[A-Za-z0-9']+", masked)) or 1
+    if len(hits) >= 2 and (len(hits) >= 3 or len(hits) * 1000 / n_tokens > 3):
+        m = CLAUDE_WORDS.search(masked)
+        counts = {}
+        for h in hits:
+            counts[h.lower()] = counts.get(h.lower(), 0) + 1
+        add(Finding("warn", "claude-intensifiers", line_of(masked, m.start()),
+                    ", ".join(f"{w} x{n}" for w, n in sorted(counts.items(), key=lambda kv: -kv[1])),
+                    "Claude leans on these; cut most of them"))
+
+    m = CLAUDE_OPENER.match(masked)
+    if m:
+        add(Finding("warn", "claude-opener", 1, excerpt(masked, m.start(), m.end()),
+                    "Claude's favourite openings; start with the substance"))
+
+    arrows = list(ARROWS.finditer(masked))
+    if arrows:
+        add(Finding("warn", "arrows", line_of(masked, arrows[0].start()),
+                    excerpt(masked, arrows[0].start(), arrows[0].end()) + (f"  (x{len(arrows)})" if len(arrows) > 1 else ""),
+                    "arrows and approximately signs in prose are an AI habit; write 'then', 'to' or 'about', and '>' for menu paths"))
+
+    for m in CHANGELOG_HEADING.finditer(masked):
+        add(Finding("warn", "changelog-heading", line_of(masked, m.start()), m.group(0).strip(),
+                    "hand over the new version; don't narrate the revision"))
+
+    for i, l in enumerate(masked.split("\n"), 1):
+        if not HEADING.match(l):
+            continue
+        words = re.findall(r"[A-Za-z][A-Za-z'-]*", HEADING.sub("", l))
+        big = [w for w in words if w.lower() not in SMALL_WORDS]
+        if len(words) >= 4 and len(big) >= 3 and all(w[0].isupper() for w in big):
+            add(Finding("warn", "title-case-heading", i, l.strip()[:70], "use sentence case for headings"))
+
     # Emoji at the start of headings or list items.
     for i, l in enumerate(masked.split("\n"), 1):
         body = LIST_ITEM.sub("", HEADING.sub("", l)).lstrip()
@@ -397,6 +457,11 @@ def lint(text: str, rhythm: bool = True) -> Report:
     if not rhythm:
         return rep
 
+    first = next((l for l in lines if l.strip()), "")
+    if re.match(r"^\s*#\s+\S", first) and n_words < 300:
+        add(Finding("warn", "title-heading", 1, first.strip()[:70],
+                    "a title heading on a short piece; the subject line or the first sentence can carry it"))
+
     if n_words and len(heads) >= 2 and n_words < 250:
         add(Finding("warn", "headings-in-short-text", line_of(masked, masked.find(heads[0])), heads[0].strip(),
                     f"{len(heads)} headings in {n_words} words; short text reads better as plain paragraphs"))
@@ -422,13 +487,13 @@ def lint(text: str, rhythm: bool = True) -> Report:
                     "several punchy one-line paragraphs; keep at most one"))
 
     threes = triplets(masked)
-    if len(threes) >= 3 and n_words and len(threes) * 1000 / n_words > 6:
+    if len(threes) >= 3 and n_words and len(threes) * 1000 / n_words > 2:
         add(Finding("warn", "groups-of-three", 1, "; ".join(threes[:3]),
                     f"{len(threes)} lists of exactly three; use the real number of items"))
 
-    if n_words >= 120 and rep.stats["semicolons"] * 150 / n_words > 1:
+    if n_words >= 120 and rep.stats["semicolons"] * 100 / n_words > 1:
         add(Finding("warn", "semicolons", 1, f"{rep.stats['semicolons']} semicolons in {n_words} words",
-                    "use full stops; semicolons in this density read as machine prose"))
+                    "lots of semicolons; if they replaced dashes, recast those sentences instead"))
 
     if blocks:
         off, last = blocks[-1]

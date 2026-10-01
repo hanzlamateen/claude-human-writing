@@ -2,8 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "human-writing",
   "owner": {
-    "name": "Hanzla Mateen",
-    "email": "hanzlamateen@live.com"
+    "name": "Hanzla Mateen"
   },
   "description": "Hanzla's writing-style plugin",
   "plugins": [

@@ -6,7 +6,7 @@ description: Use when writing or revising anything other people will read (PR de
 
 # Human writing
 
-The rules are in [WRITING.md](WRITING.md) in this folder. Claude Code loads them into every session already; in claude.ai, read that file first. This file is the process for drafts that matter, with examples. The evidence is in [references/storyscope.md](references/storyscope.md) (the study these rules start from) and [references/surface-tells.md](references/surface-tells.md) (word and punctuation tells from other studies).
+The rules are in [WRITING.md](WRITING.md) in this folder. Claude Code loads them into every session already; in claude.ai, read that file first. This file is the process for drafts that matter, with examples. The evidence is in [references/storyscope.md](references/storyscope.md) (the study these rules start from) and [references/surface-tells.md](references/surface-tells.md) (word, punctuation and formatting tells from other studies, Claude's first). Most published word lists were built on ChatGPT, and Claude rarely uses those words, so check for Claude's own habits: em dashes, "actually" and "genuinely", "Here's" openers, arrows, title headings.
 
 The main lesson from the study: detectors still caught AI stories after the surface tics were edited out, because the giveaways were in the structure. What gets said, in what order, and what gets left unsaid. So revise the shape first and the words second.
 
@@ -123,13 +123,13 @@ After: "Fixed in 3f2a1c9. Empty lists now return 200 with `[]` instead of 404, a
 Before:
 
 ```
-Sarah's chest tightened as she stepped into the kitchen. The air smelled of burnt coffee and something else — something like regret. Rain streaked the window, mirroring the tears she refused to let fall. In that moment she understood that forgiveness was never about her father. It was about her.
+Joan's chest tightened as she stepped into the kitchen. The air smelled of burnt coffee and something else — something like regret. Rain streaked the window, mirroring the tears she refused to let fall. In that moment she understood that forgiveness was never about her father. It was about her.
 ```
 
 After:
 
 ```
-Sarah was angry, and she knew it, which made it worse. Her father had made coffee for two, as if nothing had happened.
+Joan was angry, and she knew it, which made it worse. Her father had made coffee for two, as if nothing had happened.
 "You're up early," he said.
 She took the cup. She didn't drink it.
 ```

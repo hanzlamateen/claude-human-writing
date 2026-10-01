@@ -3,8 +3,7 @@
   "name": "human-writing",
   "description": "Writing rules, a skill and hooks that keep Claude's fingerprint out of commits, PRs, issues, docs and messages",
   "author": {
-    "name": "Hanzla Mateen",
-    "email": "hanzlamateen@live.com"
+    "name": "Hanzla Mateen"
   },
   "homepage": "https://github.com/hanzlamateen/claude-human-writing",
   "repository": "https://github.com/hanzlamateen/claude-human-writing",
