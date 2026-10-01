@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "human-writing",
+  "owner": {
+    "name": "Hanzla Mateen",
+    "email": "hanzlamateen@live.com"
+  },
+  "description": "Hanzla's writing-style plugin",
+  "plugins": [
+    {
+      "name": "human-writing",
+      "source": "./",
+      "description": "Writing rules, a skill and hooks that keep Claude's fingerprint out of commits, PRs, issues, docs and messages"
+    }
+  ]
+}
